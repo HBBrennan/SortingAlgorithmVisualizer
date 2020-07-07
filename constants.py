@@ -1,3 +1,5 @@
+from enum import Enum
+
 import pygame
 pygame.font.init()
 
@@ -34,8 +36,15 @@ button_position = [
     (520, 90, 240, 70)
 ]
 
-array_size = 80  # default, 80 = large, 40 = Medium, 20 = small
-algorithm = 0
-sorting_speed = 0  # 0 = fast, 1 = Medium, 2 = slow
 
-line_width = int(((1280 - (array_size - 1) * 5 - 4) / array_size))
+class arraySize(Enum):  # default, 80 = large, 40 = Medium, 20 = small
+    LARGE = 80
+    Medium = 40
+    SMALL = 20
+
+algorithm = 0
+
+class sortingSpeed(Enum):  # 0 = fast, 1 = Medium, 2 = slow
+    FAST = 0
+    MEDIUM = 1
+    SLOW = 2
