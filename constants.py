@@ -1,6 +1,8 @@
 import pygame
 pygame.font.init()
 
+win = pygame.display.set_mode((1280, 720))
+
 verdana16 = pygame.font.SysFont('Verdana', 16)
 verdana24 = pygame.font.SysFont('Verdana', 24)
 verdana30 = pygame.font.SysFont('Verdana', 30)

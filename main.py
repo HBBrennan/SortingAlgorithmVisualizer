@@ -3,24 +3,25 @@ import pygame
 import math
 import time
 import algorithms
+import constants
+
+
 def main():
     pygame.init()
-
-    win = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("Sorting Algorithm Visualizer")
 
+    print("The width of every line should be: " + str(constants.line_width) + " pixels.")
 
-    print("The width of every line should be: " + str(line_width) + " pixels.")
-
-    array = list(range(1, array_size + 1))
+    array = list(range(1, constants.array_size + 1))
     random.shuffle(array)
     print(array)
 
     run = True
-    win.fill((128, 128, 128))
-    draw_circles()
-    draw_text()
-    draw_lines()
+    constants.win.fill((128, 128, 128))
+    draw_circles(constants.win, constants.color_white, constants.circle_position, constants.algorithm,
+                 constants.sorting_speed)
+    draw_text(constants.win, constants.verdana24, constants.verdana16, constants.color_white)
+    draw_lines(array, constants.win, constants.color_dark_blue, constants.line_width)
     pygame.display.update()
     while run:
         global mouse_x, mouse_y
@@ -30,84 +31,87 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONUP:
                 pygame.event.get()
-                mark_circles()
-                draw_circles()
-                if over_button(button_position[1]):
-                    refresh_lines()
-                if over_button(button_position[0]):
-                    sort()
+                mark_circles(constants.array_size, constants.sorting_speed, constants.algorithm,
+                             constants.circle_position)
+                draw_circles(constants.win, constants.color_white, constants.circle_position, constants.algorithm,
+                 constants.sorting_speed)
+                if over_button(constants.button_position[1]):
+                    refresh_lines(constants.win, array, constants.line_width)
+                if over_button(constants.button_position[0]):
+                    sort(constants.algorithm)
 
-        draw_lines()
-        draw_text()
-        draw_buttons()
+        draw_lines(array, constants.win, constants.color_dark_blue, constants.line_width)
+        draw_text(constants.win, constants.verdana24, constants.verdana16, constants.color_white)
+        draw_buttons(constants.win, constants.button_position, constants.color_dark_blue, constants.color_red,
+                     constants.color_white, constants.verdana30)
         pygame.display.update()
 
-def draw_lines():
+
+def draw_lines(array, win, line_color, line_width):
     x = 2
     for line in array:
         height = int(line / len(array) * 555)
-        pygame.draw.rect(win, color_dark_blue, (x, 720 - height, line_width, height))
+        pygame.draw.rect(win, line_color, (x, 720 - height, line_width, height))
         x += line_width + 5
     pygame.display.update()
 
 
-def refresh_lines():
+def refresh_lines(win, array, line_width):
     pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
-    global array, line_width
-    array = list(range(1, array_size + 1))
+    array = list(range(1, constants.array_size + 1))
     random.shuffle(array)
-    line_width = int(((1280 - (array_size - 1) * 5 - 4) / array_size))
+    line_width = int(((1280 - (constants.array_size - 1) * 5 - 4) / constants.array_size))
     draw_lines()
 
 
-def draw_text():
-    win.blit(verdana24.render('Algorithm', False, color_white), (950, 20))
-    win.blit(verdana16.render('Bubble Sort', False, color_white), (870, 76))
-    win.blit(verdana16.render('Selection Sort', False, color_white), (870, 106))
-    win.blit(verdana16.render('Insertion Sort', False, color_white), (870, 136))
-    win.blit(verdana16.render('Bucket Sort', False, color_white), (1070, 76))
-    win.blit(verdana16.render('Merge Sort', False, color_white), (1070, 106))
-    win.blit(verdana16.render('Quick Sort', False, color_white), (1070, 136))
+def draw_text(win, header_text, small_text, color):
+    win.blit(header_text.render('Algorithm', False, color), (950, 20))
+    win.blit(small_text.render('Bubble Sort', False, color), (870, 76))
+    win.blit(small_text.render('Selection Sort', False, color), (870, 106))
+    win.blit(small_text.render('Insertion Sort', False, color), (870, 136))
+    win.blit(small_text.render('Bucket Sort', False, color), (1070, 76))
+    win.blit(small_text.render('Merge Sort', False, color), (1070, 106))
+    win.blit(small_text.render('Quick Sort', False, color), (1070, 136))
 
-    win.blit(verdana24.render('Speed', False, color_white), (55, 26))
-    win.blit(verdana16.render('Fast', False, color_white), (110, 77))
-    win.blit(verdana16.render('Medium', False, color_white), (110, 107))
-    win.blit(verdana16.render('Slow', False, color_white), (110, 137))
+    win.blit(header_text.render('Speed', False, color), (55, 26))
+    win.blit(small_text.render('Fast', False, color), (110, 77))
+    win.blit(small_text.render('Medium', False, color), (110, 107))
+    win.blit(small_text.render('Slow', False, color), (110, 137))
 
-    win.blit(verdana24.render('Size', False, color_white), (265, 26))
-    win.blit(verdana16.render('Large', False, color_white), (310, 77))
-    win.blit(verdana16.render('Medium', False, color_white), (310, 107))
-    win.blit(verdana16.render('Small', False, color_white), (310, 137))
+    win.blit(header_text.render('Size', False, color), (265, 26))
+    win.blit(small_text.render('Large', False, color), (310, 77))
+    win.blit(small_text.render('Medium', False, color), (310, 107))
+    win.blit(small_text.render('Small', False, color), (310, 137))
 
 
-def draw_buttons():
+def draw_buttons(win, button_position, active_color, inactive_color, text_color, text_font):
     for button in button_position:
-        color = color_dark_blue
+        color = inactive_color
         if over_button(button):
-            color = color_light_blue
+            color = active_color
 
         pygame.draw.rect(win, color, button)
 
-    win.blit(verdana30.render('Sort', False, color_white), (610, 26))
-    win.blit(verdana30.render('Reset', False, color_white), (600, 106))
+    win.blit(text_font.render('Sort', False, text_color), (610, 26))
+    win.blit(text_font.render('Reset', False, text_color), (600, 106))
 
 
-def draw_circles():
+def draw_circles(win, color, circle_position, algorithm, sorting_speed):
     for num in range(len(circle_position)):
-        pygame.draw.circle(win, color_white, circle_position[num], 12, 3)
+        pygame.draw.circle(win, color, circle_position[num], 12, 3)
         pygame.draw.circle(win, (128, 128, 128), circle_position[num], 7)
 
-    pygame.draw.circle(win, color_white, (circle_position[algorithm][0], circle_position[algorithm][1]), 5)
+    pygame.draw.circle(win, color, (circle_position[algorithm][0], circle_position[algorithm][1]), 5)
 
-    pygame.draw.circle(win, color_white, (circle_position[sorting_speed + 6][0],
-                                          circle_position[sorting_speed + 6][1]), 5)
+    pygame.draw.circle(win, color, (circle_position[sorting_speed + 6][0],
+                                    circle_position[sorting_speed + 6][1]), 5)
 
-    if array_size == 80:
-        pygame.draw.circle(win, color_white, (circle_position[9][0], circle_position[9][1]), 5)
-    elif array_size == 40:
-        pygame.draw.circle(win, color_white, (circle_position[10][0], circle_position[10][1]), 5)
-    elif array_size == 20:
-        pygame.draw.circle(win, color_white, (circle_position[11][0], circle_position[11][1]), 5)
+    if constants.array_size == 80:
+        pygame.draw.circle(win, color, (circle_position[9][0], circle_position[9][1]), 5)
+    elif constants.array_size == 40:
+        pygame.draw.circle(win, color, (circle_position[10][0], circle_position[10][1]), 5)
+    elif constants.array_size == 20:
+        pygame.draw.circle(win, color, (circle_position[11][0], circle_position[11][1]), 5)
 
 
     pygame.display.update()
@@ -117,8 +121,7 @@ def check_distance(x, y, x2, y2):
     return math.sqrt((x - x2) ** 2 + (y - y2) ** 2)
 
 
-def mark_circles():
-    global array_size, sorting_speed, algorithm
+def mark_circles(array_size, sorting_speed, algorithm, circle_position):
     for num in range(3):  # speed buttons
         if check_distance(mouse_x, mouse_y, int(circle_position[num + 6][0]), int(circle_position[num + 6][1])) < 8:
             if num + 6 == 6:
@@ -146,28 +149,28 @@ def over_button(button_pos):
            button_pos[1] < mouse_y < button_pos[1] + button_pos[3]
 
 
-def sort():
+def sort(algorithm):
     if algorithm == 0:
         bubble_sort()
 
 
-def bubble_sort():
+def bubble_sort(win, inactive_color, active_color, finished_color, array):
     for i in range(len(array) - 1):
         for j in range(0, len(array) - i - 1):
             pygame.event.get()
-            set_line_color(j, color_red, int(array[j] / len(array) * 555))
-            set_line_color(j + 1, color_red, int(array[j + 1] / len(array) * 555))
+            set_line_color(constants.win, constants.line_width, j, active_color, int(array[j] / len(array) * 555))
+            set_line_color(constants.win, constants.line_width, j + 1, active_color, int(array[j + 1] / len(array) * 555))
             slow_down()
             if array[j] > array[j + 1]:
                 swap(j, j + 1)
                 pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
                 draw_lines()
-            set_line_color(j, color_dark_blue, int(array[j] / len(array) * 555))
-            set_line_color(j + 1, color_dark_blue, int(array[j + 1] / len(array) * 555))
-        set_line_color(i, color_white, int(i / len(array) * 555))
+            set_line_color(constants.win, constants.line_width, j, inactive_color, int(array[j] / len(array) * 555))
+            set_line_color(constants.win, constants.line_width, j + 1, inactive_color, int(array[j + 1] / len(array) * 555))
+        set_line_color(constants.win, constants.line_width, i, finished_color, int(i / len(array) * 555))
 
 
-def slow_down():
+def slow_down(sorting_speed):
     if sorting_speed == 0:
         pygame.time.delay(5)
     if sorting_speed == 1:
@@ -176,12 +179,11 @@ def slow_down():
         pygame.time.delay(100)
 
 
-def swap(index1, index2):
-    global array
+def swap(array, index1, index2):
     array[index1], array[index2] = array[index2], array[index1]
 
 
-def set_line_color(index, color, height):
+def set_line_color(win, line_width, index, color, height):
     x = 2 + index * (5 + line_width)
     pygame.draw.rect(win, color, (x, 720 - height, line_width, height))
     pygame.display.update()
