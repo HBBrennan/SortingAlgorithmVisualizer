@@ -38,7 +38,7 @@ def main():
                 if over_button(constants.button_position[1]):
                     refresh_lines(constants.win, array, constants.line_width)
                 if over_button(constants.button_position[0]):
-                    sort(constants.algorithm)
+                    sort(constants.algorithm, array)
 
         draw_lines(array, constants.win, constants.color_dark_blue, constants.line_width)
         draw_text(constants.win, constants.verdana24, constants.verdana16, constants.color_white)
@@ -149,9 +149,10 @@ def over_button(button_pos):
            button_pos[1] < mouse_y < button_pos[1] + button_pos[3]
 
 
-def sort(algorithm):
+def sort(algorithm, array):
     if algorithm == 0:
-        bubble_sort()
+        bubble_sort(constants.win, constants.color_dark_blue, constants.color_white,
+                    constants.color_white, array)
 
 
 def bubble_sort(win, inactive_color, active_color, finished_color, array):
@@ -160,11 +161,11 @@ def bubble_sort(win, inactive_color, active_color, finished_color, array):
             pygame.event.get()
             set_line_color(constants.win, constants.line_width, j, active_color, int(array[j] / len(array) * 555))
             set_line_color(constants.win, constants.line_width, j + 1, active_color, int(array[j + 1] / len(array) * 555))
-            slow_down()
+            slow_down(constants.sorting_speed)
             if array[j] > array[j + 1]:
-                swap(j, j + 1)
+                swap(array, j, j + 1)
                 pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
-                draw_lines()
+                draw_lines(array, constants.win, constants.color_dark_blue, constants.line_width)
             set_line_color(constants.win, constants.line_width, j, inactive_color, int(array[j] / len(array) * 555))
             set_line_color(constants.win, constants.line_width, j + 1, inactive_color, int(array[j + 1] / len(array) * 555))
         set_line_color(constants.win, constants.line_width, i, finished_color, int(i / len(array) * 555))
