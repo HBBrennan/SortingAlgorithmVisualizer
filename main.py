@@ -32,12 +32,12 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONUP:
                 pygame.event.get()
-                mark_circles(mouse_x, mouse_y, array_size.value, sorting_speed.value, constants.algorithm,
-                             constants.circle_position)
+                sorting_speed, array_size, algorithm = mark_circles(mouse_x, mouse_y, array_size, sorting_speed,
+                                                                    constants.algorithm, constants.circle_position)
                 draw_circles(constants.win, constants.color_white, constants.circle_position, constants.algorithm,
                  sorting_speed.value, array_size.value)
                 if over_button(constants.button_position[1], mouse_x, mouse_y):
-                    refresh_lines(constants.win, array, line_width, array_size.value)
+                    array, line_width = refresh_lines(constants.win, array, line_width, array_size.value)
                 if over_button(constants.button_position[0], mouse_x, mouse_y):
                     sort(constants.algorithm, array, sorting_speed.value, line_width)
 
@@ -62,6 +62,7 @@ def refresh_lines(win, array, line_width, array_size):
     array = list(range(1, array_size + 1))
     random.shuffle(array)
     line_width = int(((1280 - (array_size - 1) * 5 - 4) / array_size))
+    return array, line_width
     draw_lines(array, constants.win, constants.color_dark_blue, line_width)
 
 
@@ -114,7 +115,6 @@ def draw_circles(win, color, circle_position, algorithm, sorting_speed, array_si
     elif array_size == 20:
         pygame.draw.circle(win, color, (circle_position[11][0], circle_position[11][1]), 5)
 
-
     pygame.display.update()
 
 
@@ -126,22 +126,24 @@ def mark_circles(mouse_x, mouse_y, array_size, sorting_speed, algorithm, circle_
     for num in range(3):  # speed buttons
         if check_distance(mouse_x, mouse_y, int(circle_position[num + 6][0]), int(circle_position[num + 6][1])) < 8:
             if num + 6 == 6:
-                sorting_speed = 0
+                sorting_speed = constants.sortingSpeed.FAST
             if num + 6 == 7:
-                sorting_speed = 1
+                sorting_speed = constants.sortingSpeed.MEDIUM
             if num + 6 == 8:
-                sorting_speed = 2
+                sorting_speed = constants.sortingSpeed.SLOW
     for num in range(3):  # size buttons
         if check_distance(mouse_x, mouse_y, int(circle_position[num + 9][0]), int(circle_position[num + 9][1])) < 8:
             if num + 9 == 9:
-                array_size = 80
+                array_size = constants.arraySize.LARGE
             if num + 9 == 10:
-                array_size = 40
+                array_size = constants.arraySize.Medium
             if num + 9 == 11:
-                array_size = 20
+                array_size = constants.arraySize.SMALL
     for num in range(6):  # algorithm buttons
         if check_distance(mouse_x, mouse_y, int(circle_position[num][0]), int(circle_position[num][1])) < 8:
             algorithm = num
+
+    return sorting_speed, array_size, algorithm
 
 
 
@@ -152,7 +154,7 @@ def over_button(button_pos, mouse_x, mouse_y):
 
 def sort(algorithm, array, sorting_speed, line_width):
     if algorithm == 0:
-        bubble_sort(constants.win, constants.color_dark_blue, constants.color_white,
+        bubble_sort(constants.win, constants.color_dark_blue, constants.color_red,
                     constants.color_white, array, sorting_speed, line_width)
 
 
