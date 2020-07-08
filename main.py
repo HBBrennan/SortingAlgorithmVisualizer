@@ -159,8 +159,9 @@ def sort(algorithm, array, sorting_speed, line_width):
 
 
 def bubble_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
+    #finished = 0
     for i in range(len(array) - 1):
-        for j in range(0, len(array) - i - 1):
+        for j in range(len(array) - i - 1):
             pygame.event.get()
             set_line_color(constants.win, line_width, j, active_color, int(array[j] / len(array) * 555))
             set_line_color(constants.win, line_width, j + 1, active_color, int(array[j + 1] / len(array) * 555))
@@ -169,9 +170,12 @@ def bubble_sort(win, inactive_color, active_color, finished_color, array, sortin
                 swap(array, j, j + 1)
                 pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
                 draw_lines(array, constants.win, constants.color_dark_blue, line_width)
+                #set_line_color(constants.win, line_width, len(array) - 1 - finished, finished_color,
+                               #int(array[len(array) - 1 - finished] / len(array) * 555))
             set_line_color(constants.win, line_width, j, inactive_color, int(array[j] / len(array) * 555))
             set_line_color(constants.win, line_width, j + 1, inactive_color, int(array[j + 1] / len(array) * 555))
-        set_line_color(constants.win, line_width, i, finished_color, int(i / len(array) * 555))
+        #finished = i
+        set_line_color(constants.win, line_width, len(array) - 1 - i, finished_color, int(array[len(array) - 1 - i] / len(array) * 555))
 
 
 def slow_down(sorting_speed):
