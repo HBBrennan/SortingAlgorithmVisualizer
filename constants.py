@@ -42,9 +42,17 @@ class arraySize(Enum):  # default, 80 = large, 40 = Medium, 20 = small
     Medium = 40
     SMALL = 20
 
-algorithm = 0
 
 class sortingSpeed(Enum):  # 0 = fast, 1 = Medium, 2 = slow
     FAST = 0
     MEDIUM = 1
     SLOW = 2
+
+class algorithms(Enum):  # 0 = bubble sort, 1 = Selection Sort, 2 = Insertion Sort,
+     BUBBLE_SORT = 0     # 3 = Bucket Sort, 4 = Merge Sort, 5 = Quick Sort
+     SELECTION_SORT = 1
+     INSERTION_SORT = 2
+     BUCKET_SORT = 3
+     MERGE_SORT = 4
+     QUICK_SORT = 5
+

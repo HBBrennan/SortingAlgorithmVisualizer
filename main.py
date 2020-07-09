@@ -12,6 +12,7 @@ def main():
 
     array_size = constants.arraySize.LARGE
     sorting_speed = constants.sortingSpeed.FAST
+    algorithm = constants.algorithms.BUBBLE_SORT
     line_width = int(((1280 - (array_size.value - 1) * 5 - 4) / array_size.value))
     print("The width of every line should be: " + str(line_width) + " pixels.")
     array = list(range(1, array_size.value + 1))
@@ -20,7 +21,7 @@ def main():
 
     run = True
     constants.win.fill((128, 128, 128))
-    draw_circles(constants.win, constants.color_white, constants.circle_position, constants.algorithm,
+    draw_circles(constants.win, constants.color_white, constants.circle_position, algorithm,
                  sorting_speed.value, array_size.value)
     draw_text(constants.win, constants.verdana24, constants.verdana16, constants.color_white)
     draw_lines(array, constants.win, constants.color_dark_blue, line_width)
@@ -33,13 +34,13 @@ def main():
             if event.type == pygame.MOUSEBUTTONUP:
                 pygame.event.get()
                 sorting_speed, array_size, algorithm = mark_circles(mouse_x, mouse_y, array_size, sorting_speed,
-                                                                    constants.algorithm, constants.circle_position)
-                draw_circles(constants.win, constants.color_white, constants.circle_position, constants.algorithm,
+                                                                    algorithm, constants.circle_position)
+                draw_circles(constants.win, constants.color_white, constants.circle_position, algorithm,
                  sorting_speed.value, array_size.value)
                 if over_button(constants.button_position[1], mouse_x, mouse_y):
                     array, line_width = refresh_lines(constants.win, array, line_width, array_size.value)
                 if over_button(constants.button_position[0], mouse_x, mouse_y):
-                    sort(constants.algorithm, array, sorting_speed.value, line_width)
+                    sort(algorithm, array, sorting_speed.value, line_width)
 
         draw_lines(array, constants.win, constants.color_dark_blue, line_width)
         draw_text(constants.win, constants.verdana24, constants.verdana16, constants.color_white)
@@ -103,7 +104,7 @@ def draw_circles(win, color, circle_position, algorithm, sorting_speed, array_si
         pygame.draw.circle(win, color, circle_position[num], 12, 3)
         pygame.draw.circle(win, (128, 128, 128), circle_position[num], 7)
 
-    pygame.draw.circle(win, color, (circle_position[algorithm][0], circle_position[algorithm][1]), 5)
+    pygame.draw.circle(win, color, (circle_position[algorithm.value][0], circle_position[algorithm.value][1]), 5)
 
     pygame.draw.circle(win, color, (circle_position[sorting_speed + 6][0],
                                     circle_position[sorting_speed + 6][1]), 5)
@@ -141,7 +142,7 @@ def mark_circles(mouse_x, mouse_y, array_size, sorting_speed, algorithm, circle_
                 array_size = constants.arraySize.SMALL
     for num in range(6):  # algorithm buttons
         if check_distance(mouse_x, mouse_y, int(circle_position[num][0]), int(circle_position[num][1])) < 8:
-            algorithm = num
+            algorithm = constants.algorithms[num]
 
     return sorting_speed, array_size, algorithm
 
@@ -153,7 +154,7 @@ def over_button(button_pos, mouse_x, mouse_y):
 
 
 def sort(algorithm, array, sorting_speed, line_width):
-    if algorithm == 0:
+    if algorithm.value == 0:
         bubble_sort(constants.win, constants.color_dark_blue, constants.color_red,
                     constants.color_white, array, sorting_speed, line_width)
 
