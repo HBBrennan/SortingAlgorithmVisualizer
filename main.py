@@ -158,7 +158,6 @@ def mark_circles(mouse_x, mouse_y, array_size, sorting_speed, algorithm, circle_
     return sorting_speed, array_size, algorithm
 
 
-
 def over_button(button_pos, mouse_x, mouse_y):
     return button_pos[0] < mouse_x < button_pos[0] + button_pos[2] and \
            button_pos[1] < mouse_y < button_pos[1] + button_pos[3]
@@ -174,7 +173,6 @@ def sort(algorithm, array, sorting_speed, line_width):
     if algorithm.value == 2:
         insertion_sort(constants.win, constants.color_dark_blue, constants.color_red,
                        constants.color_white, array, sorting_speed, line_width)
-
 
 
 def bubble_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
@@ -231,19 +229,21 @@ def selection_sort(win, inactive_color, active_color, finished_color, array, sor
 
 def insertion_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
     for i in range(1, len(array)):
-
         key = array[i]
-
         j = i - 1
-        while j >= 0 and key < array[j] :
+        while j >= 0 and key < array[j]:
+            set_line_color(win, line_width, i, finished_color, int(array[i] / len(array) * 555))
+            set_line_color(win, line_width, j + 1, active_color, int(array[j + 1] / len(array) * 555))
+            set_line_color(win, line_width, j, active_color, int(array[j] / len(array) * 555))
             array[j + 1] = array[j]
+            slow_down(sorting_speed)
+            pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
+            draw_lines(array, win, inactive_color, line_width)
             j -= 1
         array[j + 1] = key
+        slow_down(sorting_speed)
         pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
         draw_lines(array, win, inactive_color, line_width)
-
-
-
 
 
 def slow_down(sorting_speed):
