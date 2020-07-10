@@ -142,7 +142,18 @@ def mark_circles(mouse_x, mouse_y, array_size, sorting_speed, algorithm, circle_
                 array_size = constants.arraySize.SMALL
     for num in range(6):  # algorithm buttons
         if check_distance(mouse_x, mouse_y, int(circle_position[num][0]), int(circle_position[num][1])) < 8:
-            algorithm = constants.algorithms[num]
+            if num == 0:
+                algorithm = constants.algorithms.BUBBLE_SORT
+            if num == 1:
+                algorithm = constants.algorithms.SELECTION_SORT
+            if num == 2:
+                algorithm = constants.algorithms.INSERTION_SORT
+            if num == 3:
+                algorithm = constants.algorithms.BUCKET_SORT
+            if num == 4:
+                algorithm = constants.algorithms.MERGE_SORT
+            if num == 5:
+                algorithm = constants.algorithms.QUICK_SORT
 
     return sorting_speed, array_size, algorithm
 
@@ -157,6 +168,13 @@ def sort(algorithm, array, sorting_speed, line_width):
     if algorithm.value == 0:
         bubble_sort(constants.win, constants.color_dark_blue, constants.color_red,
                     constants.color_white, array, sorting_speed, line_width)
+    if algorithm.value == 1:
+        selection_sort(constants.win, constants.color_dark_blue, constants.color_red,
+                       constants.color_white, array, sorting_speed, line_width)
+    if algorithm.value == 2:
+        insertion_sort(constants.win, constants.color_dark_blue, constants.color_red,
+                       constants.color_white, array, sorting_speed, line_width)
+
 
 
 def bubble_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
@@ -177,6 +195,55 @@ def bubble_sort(win, inactive_color, active_color, finished_color, array, sortin
             set_line_color(constants.win, line_width, j + 1, inactive_color, int(array[j + 1] / len(array) * 555))
         #finished = i
         set_line_color(constants.win, line_width, len(array) - 1 - i, finished_color, int(array[len(array) - 1 - i] / len(array) * 555))
+
+
+def selection_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
+    # for i in range(len(array)):
+    #     min_idx = i
+    #     set_line_color(win, line_width, i, active_color, int(array[i] / len(array) * 555))
+    #     slow_down(sorting_speed)
+    #     for j in range(i + 1, len(array)):
+    #         set_line_color(win, line_width, j, active_color, int(array[j] / len(array) * 555))
+    #         if array[min_idx] > array[j]:
+    #             set_line_color(win, line_width, min_idx, inactive_color, int(array[j] / len(array) * 555))
+    #             min_idx = j
+    #             set_line_color(win, line_width, min_idx, active_color, int(array[j] / len(array) * 555))
+    #
+    #     array[i], array[min_idx] = array[min_idx], array[i]
+    for i in range(len(array) - 1):
+        max_idx = i
+        for j in range(i + 1, len(array) - 1):
+            pygame.event.get()
+            set_line_color(win, line_width, j, active_color, int(array[j] / len(array) * 555))
+            slow_down(sorting_speed)
+            if array[j] < array[max_idx]:
+                set_line_color(win, line_width, max_idx, inactive_color, int(array[max_idx] / len(array) * 555))
+                max_idx = j
+                set_line_color(win, line_width, max_idx, active_color, int(array[max_idx] / len(array)))
+            else:
+                set_line_color(win, line_width, j, inactive_color, int(array[j] / len(array) * 555))
+            set_line_color(win, line_width, max_idx, inactive_color, int(array[j] / len(array) * 555))
+            array[i], array[max_idx] = array[max_idx], array[i]
+            set_line_color(win, line_width, i, finished_color, int(array[i] / len(array) * 555))
+            pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
+            draw_lines(array, win, inactive_color, line_width)
+
+
+def insertion_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
+    for i in range(1, len(array)):
+
+        key = array[i]
+
+        j = i - 1
+        while j >= 0 and key < array[j] :
+            array[j + 1] = array[j]
+            j -= 1
+        array[j + 1] = key
+        pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
+        draw_lines(array, win, inactive_color, line_width)
+
+
+
 
 
 def slow_down(sorting_speed):
