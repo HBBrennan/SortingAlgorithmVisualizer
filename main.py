@@ -15,7 +15,7 @@ def main():
     algorithm = constants.algorithms.BUBBLE_SORT
     line_width = int(((1280 - (array_size.value - 1) * 5 - 4) / array_size.value))
     print("The width of every line should be: " + str(line_width) + " pixels.")
-    array = list(range(1, array_size.value + 1))
+    array = list(range(1, int(array_size.value) + 1))
     random.shuffle(array)
     print(array)
 
@@ -63,8 +63,8 @@ def refresh_lines(win, array, line_width, array_size):
     array = list(range(1, array_size + 1))
     random.shuffle(array)
     line_width = int(((1280 - (array_size - 1) * 5 - 4) / array_size))
-    return array, line_width
     draw_lines(array, constants.win, constants.color_dark_blue, line_width)
+    return array, line_width
 
 
 def draw_text(win, header_text, small_text, color):
@@ -173,6 +173,9 @@ def sort(algorithm, array, sorting_speed, line_width):
     if algorithm.value == 2:
         insertion_sort(constants.win, constants.color_dark_blue, constants.color_red,
                        constants.color_white, array, sorting_speed, line_width)
+    if algorithm.value == 3:
+        bucket_sort(constants.win, constants.color_dark_blue, constants.color_red,
+                    constants.color_white, array, sorting_speed, line_width)
 
 
 def bubble_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
@@ -244,6 +247,12 @@ def insertion_sort(win, inactive_color, active_color, finished_color, array, sor
         slow_down(sorting_speed)
         pygame.draw.rect(win, (128, 128, 128), (0, 165, 1280, 720))
         draw_lines(array, win, inactive_color, line_width)
+
+
+def bucket_sort(win, inactive_color, active_color, finished_color, array, sorting_speed, line_width):
+    bucket = []
+
+
 
 
 def slow_down(sorting_speed):
