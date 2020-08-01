@@ -22,8 +22,7 @@ def main():
 
     run = True
     constants.WIN.fill((128, 128, 128))
-    draw_circles(constants.WIN, constants.COLOR_WHITE, constants.CIRCLE_POSITIONS, settings.algorithm,
-                 settings.sorting_speed.value, settings.array_size.value)
+    draw_circles(constants.WIN, constants.COLOR_WHITE, constants.CIRCLE_POSITIONS, settings)
     draw_text(constants.WIN, constants.VERDANA_24, constants.VERDANA_16, constants.COLOR_WHITE)
     renderer.draw_lines(constants.WIN, constants.COLOR_DARK_BLUE)
     pygame.display.update()
@@ -36,8 +35,7 @@ def main():
                 pygame.event.get()
                 settings = mark_circles(mouse_x, mouse_y, settings.array_size, settings.sorting_speed,
                                         settings.algorithm, constants.CIRCLE_POSITIONS)
-                draw_circles(constants.WIN, constants.COLOR_WHITE, constants.CIRCLE_POSITIONS, settings.algorithm,
-                             settings.sorting_speed.value, settings.array_size.value)
+                draw_circles(constants.WIN, constants.COLOR_WHITE, constants.CIRCLE_POSITIONS, settings)
                 if over_button(constants.BUTTON_POSITIONS[1], mouse_x, mouse_y):
                     renderer.refresh_lines(constants.WIN, settings.array_size.value)
                 if over_button(constants.BUTTON_POSITIONS[0], mouse_x, mouse_y):
