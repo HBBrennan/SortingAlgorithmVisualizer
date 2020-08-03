@@ -33,8 +33,7 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONUP:
                 pygame.event.get()
-                settings = mark_circles(mouse_x, mouse_y, settings.array_size, settings.sorting_speed,
-                                        settings.algorithm, constants.CIRCLE_POSITIONS)
+                mark_circles(mouse_x, mouse_y, settings, constants.CIRCLE_POSITIONS)
                 draw_circles(constants.WIN, constants.COLOR_WHITE, constants.CIRCLE_POSITIONS, settings)
                 if over_button(constants.BUTTON_POSITIONS[1], mouse_x, mouse_y):
                     renderer.refresh_lines(constants.WIN, settings.array_size.value)
